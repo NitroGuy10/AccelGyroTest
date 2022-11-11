@@ -4,81 +4,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingus</title>
+    <title>Document</title>
 </head>
 <body>
-    <h1>bingus!!</h1>
-    <p>time: <span id="time"></span></p>
-    <p>acceleromter x: <span id="accel-x"></span></p>
+    <button onclick="start()">start</button>
+    <p>alpha: <span id="alpha"></span></p>
+    <p>beta: <span id="beta"></span></p>
+    <p>gamma: <span id="gamma"></span></p>
 
     <script>
-        function update ()
+        function start() {
+            if (typeof DeviceMotionEvent.requestPermission === 'function') {
+              // Handle iOS 13+ devices.
+              DeviceMotionEvent.requestPermission()
+                .then((state) => {
+                  if (state === 'granted') {
+                    window.addEventListener('devicemotion', handleOrientation);
+                  } else {
+                    console.error('Request to access the orientation was rejected');
+                  }
+                })
+                .catch(console.error);
+            } else {
+              // Handle regular non iOS 13+ devices.
+              window.addEventListener('devicemotion', handleOrientation);
+            }
+          }
+
+        function handleOrientation(event)
         {
-            document.getElementById("time").innerText = Date.now();
+            const alpha = event.alpha;
+            const beta = event.beta;
+            const gamma = event.gamma;
             
+            document.getElementById("alpha").innerText = alpha;
+            document.getElementById("beta").innerText = beta;
+            document.getElementById("gamma").innerText = gamma;
         }
-
-        window.ondevicemotion = function(event) {
-            
-        }
-
-        addEventListener('devicemotion', (event) => {
-
-        });
-
-        ondevicemotion = (event) => {
-            console.log(event.acceleration);
-
-            var accelerationX = event.accelerationIncludingGravity.x;
-            var accelerationY = event.accelerationIncludingGravity.y;
-            var accelerationZ = event.accelerationIncludingGravity.z;
-
-            document.getElementById("accel-x").innerHTML = accelerationX;
-        };
-
-        navigator.permissions.query({ name: 'accelerometer' })
-.then((result) => {
-  if (result.state === 'denied') {
-    console.log('Permission to use accelerometer sensor is denied.');
-    return;
-  }
-  // Use the sensor.
-});
-
-
-
-        let accelerometer = null;
-try {
-    accelerometer = new Accelerometer({ referenceFrame: 'device' });
-    accelerometer.addEventListener('error', (event) => {
-        // Handle runtime errors.
-        if (event.error.name === 'NotAllowedError') {
-            // Branch to code for requesting permission.
-        } else if (event.error.name === 'NotReadableError' ) {
-            console.log('Cannot connect to the sensor.');
-        }
-    });
-    accelerometer.addEventListener('reading', () => {
-        document.getElementById("accel-x").innerHTML = accelerometer.x;
-    });
-    accelerometer.start();
-} catch (error) {
-    // Handle construction errors.
-    if (error.name === 'SecurityError') {
-        // See the note above about feature policy.
-        console.log('Sensor construction was blocked by a feature policy.');
-    } else if (error.name === 'ReferenceError') {
-        console.log('Sensor is not supported by the User Agent.');
-    } else {
-        throw error;
-    }
-}
-
-
-
-        setInterval(update, 500);
     </script>
 </body>
 </html>
-
-
