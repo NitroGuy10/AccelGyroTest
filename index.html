@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingus</title>
+</head>
+<body>
+    <h1>bingus!!</h1>
+    <p>time: <span id="time"></span></p>
+    <p>acceleromter x: <span id="accel-x"></span></p>
+
+    <script>
+        function update ()
+        {
+            document.getElementById("time").innerText = Date.now();
+            
+        }
+
+        window.ondevicemotion = function(event) {
+            
+        }
+
+        addEventListener('devicemotion', (event) => {
+
+        });
+
+        ondevicemotion = (event) => {
+            console.log(event.acceleration);
+
+            var accelerationX = event.accelerationIncludingGravity.x;
+            var accelerationY = event.accelerationIncludingGravity.y;
+            var accelerationZ = event.accelerationIncludingGravity.z;
+
+            document.getElementById("accel-x").innerHTML = accelerationX;
+        };
+
+
+        setInterval(update, 500);
+    </script>
+</body>
+</html>
+
+
