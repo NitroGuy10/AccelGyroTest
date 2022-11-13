@@ -22,6 +22,8 @@
   <p>y vel: <span id="y-vel"></span></p>
   <p>z vel: <span id="z-vel"></span></p>
 
+  <p>deltatime: <span id="deltatime"></span></p>
+
   <br>
   <hr>
   <br>
@@ -86,9 +88,14 @@
 
     let lastTime = 0;
 
-    let x_vel = 0;
-    let y_vel = 0;
-    let z_vel = 0;
+    let x_last_acc = 0;
+    let y_last_acc = 0;
+    let z_last_acc = 0;
+
+
+    let x_last_vel = 0;
+    let y_last_vel = 0;
+    let z_last_vel = 0;
 
     let x_pos = 0;
     let y_pos = 0;
@@ -105,13 +112,18 @@
       const y_acc = event.acceleration.y;  // Up and down
       const z_acc = event.acceleration.z;  // Into and out of screen
 
-      x_vel += x_acc.toFixed(1) * deltaTime;
-      y_vel += y_acc.toFixed(1) * deltaTime;
-      z_vel += z_acc.toFixed(1) * deltaTime;
+      let x_vel = (x_acc - x_last_acc) / deltaTime;
+      let y_vel = (y_acc - y_last_acc) / deltaTime;
+      let z_vel = (z_acc - z_last_acc) / deltaTime;
 
-      x_pos += x_vel.toFixed(1) * deltaTime;
-      y_pos += y_vel.toFixed(1) * deltaTime;
-      z_pos += z_vel.toFixed(1) * deltaTime;
+      x_pos = (x_vel - x_last_vel) / deltaTime;
+      y_pos = (y_vel - y_last_vel) / deltaTime;
+      z_pos = (z_vel - z_last_vel) / deltaTime;
+
+      x_last_vel = x_vel
+      y_last_vel = y_vel
+      z_last_vel = z_vel
+
 
 
 
@@ -126,6 +138,9 @@
       document.getElementById("x-pos").innerText = x_pos;
       document.getElementById("y-pos").innerText = y_pos;
       document.getElementById("z-pos").innerText = z_pos;
+
+      document.getElementById("deltatime").innerText = deltaTime;
+
     }
   </script>
 </body>
