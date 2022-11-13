@@ -12,6 +12,10 @@
     <p>beta: <span id="beta"></span></p>
     <p>gamma: <span id="gamma"></span></p>
 
+    <p>x: <span id="x"></span></p>
+    <p>y: <span id="y"></span></p>
+    <p>z: <span id="z"></span></p>
+
     <script>
       async function onClick() {
         /*
@@ -53,18 +57,47 @@
           // Handle regular non iOS 13+ devices.
           window.addEventListener('deviceorientation', handleOrientation);
         }
+
+        if (typeof DeviceMotionEvent.requestPermission === 'function') {
+          // Handle iOS 13+ devices.
+          DeviceMotionEvent.requestPermission()
+            .then((state) => {
+              if (state === 'granted') {
+                window.addEventListener('devicemotion', handleMotion);
+              } else {
+                document.body.innerText = state
+              }
+            })
+            .catch((reason) => {
+              document.body.innerText = reason
+            });
+        } else {
+          // Handle regular non iOS 13+ devices.
+          window.addEventListener('devicemotion', handleMotion);
+        }
         
       }
 
         function handleOrientation(event)
         {
-            const alpha = event.alpha;
-            const beta = event.beta;
-            const gamma = event.gamma;
+            const alpha = event.alpha;  // Roll
+            const beta = event.beta;  // Pitch
+            const gamma = event.gamma;  // Yaw
             
             document.getElementById("alpha").innerText = alpha;
             document.getElementById("beta").innerText = beta;
             document.getElementById("gamma").innerText = gamma;
+        }
+
+        function handleMotion(event)
+        {
+            const x_acc = event.acceleration.x;  // Left and right
+            const y_acc = event.acceleration.y;  // Up and down
+            const z_acc = event.acceleration.z;  // Into and out of screen
+            
+            document.getElementById("x").innerText = x_acc;
+            document.getElementById("y").innerText = y_acc;
+            document.getElementById("z").innerText = z_acc;
         }
     </script>
 </body>
