@@ -7,29 +7,54 @@
     <title>Document</title>
 </head>
 <body>
-    <button onclick="start()">start</button>
+    <button onclick="onClick()">start</button>
     <p>alpha: <span id="alpha"></span></p>
     <p>beta: <span id="beta"></span></p>
     <p>gamma: <span id="gamma"></span></p>
 
     <script>
-        function start() {
-            if (typeof DeviceMotionEvent.requestPermission === 'function') {
-              // Handle iOS 13+ devices.
-              DeviceMotionEvent.requestPermission()
-                .then((state) => {
-                  if (state === 'granted') {
-                    window.addEventListener('devicemotion', handleOrientation);
-                  } else {
-                    console.error('Request to access the orientation was rejected');
-                  }
-                })
-                .catch(console.error);
-            } else {
-              // Handle regular non iOS 13+ devices.
-              window.addEventListener('devicemotion', handleOrientation);
-            }
-          }
+      async function onClick() {
+        /*
+        if (typeof DeviceMotionEvent.requestPermission === 'function') {
+          // Handle iOS 13+ devices.
+          DeviceMotionEvent.requestPermission()
+            .then((state) => {
+              if (state === 'granted') {
+                window.addEventListener('devicemotion', handleOrientation);
+              } else {
+                console.error('Request to access the orientation was rejected');
+              }
+            })
+            .catch(console.error);
+        } else {
+          // Handle regular non iOS 13+ devices.
+          window.addEventListener('devicemotion', handleOrientation);
+        }
+        */
+
+        
+        //window.addEventListener('deviceorientation', handleOrientation);
+
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+          // Handle iOS 13+ devices.
+          DeviceOrientationEvent.requestPermission()
+            .then((state) => {
+              if (state === 'granted') {
+                window.addEventListener("deviceorientation", handleOrientation);
+              } else {
+                document.body.innerText = state
+                //document.body.innerText = 'Request to access the orientation was rejected';
+              }
+            })
+            .catch((reason) => {
+              document.body.innerText = reason
+            });
+        } else {
+          // Handle regular non iOS 13+ devices.
+          window.addEventListener('deviceorientation', handleOrientation);
+        }
+        
+      }
 
         function handleOrientation(event)
         {
