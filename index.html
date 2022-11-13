@@ -105,13 +105,16 @@
       const y_acc = event.acceleration.y;  // Up and down
       const z_acc = event.acceleration.z;  // Into and out of screen
 
-      x_vel += x_acc.toFixed(1) * deltaTime;
-      y_vel += y_acc.toFixed(1) * deltaTime;
-      z_vel += z_acc.toFixed(1) * deltaTime;
+      x_vel += x_acc.toFixed(2) * deltaTime;
+      x_vel *= 0.9
+      y_vel += y_acc.toFixed(2) * deltaTime;
+      y_vel *= 0.9
+      z_vel += z_acc.toFixed(2) * deltaTime;
+      z_vel *= 0.9
 
-      x_pos += x_vel.toFixed(1) * deltaTime;
-      y_pos += y_vel.toFixed(1) * deltaTime;
-      z_pos += z_vel.toFixed(1) * deltaTime;
+      x_pos += x_vel.toFixed(2) * deltaTime;
+      y_pos += y_vel.toFixed(2) * deltaTime;
+      z_pos += z_vel.toFixed(2) * deltaTime;
 
 
 
