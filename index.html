@@ -1,104 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-    <button onclick="onClick()">start</button>
-    <p>alpha: <span id="alpha"></span></p>
-    <p>beta: <span id="beta"></span></p>
-    <p>gamma: <span id="gamma"></span></p>
+  <button onclick="onClick()">start</button>
+  <p>alpha: <span id="alpha"></span></p>
+  <p>beta: <span id="beta"></span></p>
+  <p>gamma: <span id="gamma"></span></p>
 
-    <p>x: <span id="x"></span></p>
-    <p>y: <span id="y"></span></p>
-    <p>z: <span id="z"></span></p>
+  <p>x acc: <span id="x-acc"></span></p>
+  <p>y acc: <span id="y-acc"></span></p>
+  <p>z acc: <span id="z-acc"></span></p>
 
-    <script>
-      async function onClick() {
-        /*
-        if (typeof DeviceMotionEvent.requestPermission === 'function') {
-          // Handle iOS 13+ devices.
-          DeviceMotionEvent.requestPermission()
-            .then((state) => {
-              if (state === 'granted') {
-                window.addEventListener('devicemotion', handleOrientation);
-              } else {
-                console.error('Request to access the orientation was rejected');
-              }
-            })
-            .catch(console.error);
-        } else {
-          // Handle regular non iOS 13+ devices.
-          window.addEventListener('devicemotion', handleOrientation);
-        }
-        */
+  <p>x vel: <span id="x-vel"></span></p>
+  <p>y vel: <span id="y-vel"></span></p>
+  <p>z vel: <span id="z-vel"></span></p>
 
-        
-        //window.addEventListener('deviceorientation', handleOrientation);
+  <br>
+  <hr>
+  <br>
 
-        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-          // Handle iOS 13+ devices.
-          DeviceOrientationEvent.requestPermission()
-            .then((state) => {
-              if (state === 'granted') {
-                window.addEventListener("deviceorientation", handleOrientation);
-              } else {
-                document.body.innerText = state
-                //document.body.innerText = 'Request to access the orientation was rejected';
-              }
-            })
-            .catch((reason) => {
-              document.body.innerText = reason
-            });
-        } else {
-          // Handle regular non iOS 13+ devices.
-          window.addEventListener('deviceorientation', handleOrientation);
-        }
+  <p>x pos: <span id="x-pos"></span></p>
+  <p>y pos: <span id="y-pos"></span></p>
+  <p>z pos: <span id="z-pos"></span></p>
 
-        if (typeof DeviceMotionEvent.requestPermission === 'function') {
-          // Handle iOS 13+ devices.
-          DeviceMotionEvent.requestPermission()
-            .then((state) => {
-              if (state === 'granted') {
-                window.addEventListener('devicemotion', handleMotion);
-              } else {
-                document.body.innerText = state
-              }
-            })
-            .catch((reason) => {
-              document.body.innerText = reason
-            });
-        } else {
-          // Handle regular non iOS 13+ devices.
-          window.addEventListener('devicemotion', handleMotion);
-        }
-        
+  <script>
+      function onClick() {
+      
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // Handle iOS 13+ devices.
+        DeviceOrientationEvent.requestPermission()
+          .then((state) => {
+            if (state === 'granted') {
+              window.addEventListener("deviceorientation", handleOrientation);
+            } else {
+              document.body.innerText = state
+              //document.body.innerText = 'Request to access the orientation was rejected';
+            }
+          })
+          .catch((reason) => {
+            document.body.innerText = reason
+          });
+      } else {
+        // Handle regular non iOS 13+ devices.
+        window.addEventListener('deviceorientation', handleOrientation);
       }
 
-        function handleOrientation(event)
-        {
-            const alpha = event.alpha;  // Roll
-            const beta = event.beta;  // Pitch
-            const gamma = event.gamma;  // Yaw
-            
-            document.getElementById("alpha").innerText = alpha;
-            document.getElementById("beta").innerText = beta;
-            document.getElementById("gamma").innerText = gamma;
-        }
+      if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        // Handle iOS 13+ devices.
+        DeviceMotionEvent.requestPermission()
+          .then((state) => {
+            if (state === 'granted') {
+              lastTime = Date.now()
+              window.addEventListener('devicemotion', handleMotion);
+            } else {
+              document.body.innerText = state
+            }
+          })
+          .catch((reason) => {
+            document.body.innerText = reason
+          });
+      } else {
+        // Handle regular non iOS 13+ devices.
+        lastTime = Date.now()
+        window.addEventListener('devicemotion', handleMotion);
+      }
 
-        function handleMotion(event)
-        {
-            const x_acc = event.acceleration.x;  // Left and right
-            const y_acc = event.acceleration.y;  // Up and down
-            const z_acc = event.acceleration.z;  // Into and out of screen
-            
-            document.getElementById("x").innerText = x_acc;
-            document.getElementById("y").innerText = y_acc;
-            document.getElementById("z").innerText = z_acc;
-        }
-    </script>
+    }
+
+    function handleOrientation(event) {
+      const alpha = event.alpha;  // Roll
+      const beta = event.beta;  // Pitch
+      const gamma = event.gamma;  // Yaw
+
+      document.getElementById("alpha").innerText = alpha;
+      document.getElementById("beta").innerText = beta;
+      document.getElementById("gamma").innerText = gamma;
+    }
+
+    let lastTime = 0;
+
+    let x_vel = 0;
+    let y_vel = 0;
+    let z_vel = 0;
+
+    let x_pos = 0;
+    let y_pos = 0;
+    let z_pos = 0;
+
+
+    function handleMotion(event) {
+
+      let currentTime = Date.now()
+      let deltaTime = currentTime - lastTime;
+      lastTime = currentTime;
+
+      const x_acc = event.acceleration.x;  // Left and right
+      const y_acc = event.acceleration.y;  // Up and down
+      const z_acc = event.acceleration.z;  // Into and out of screen
+
+      x_vel += x_acc * deltaTime;
+      y_vel += y_acc * deltaTime;
+      z_vel += z_acc * deltaTime;
+
+      x_pos += x_vel * deltaTime;
+      y_pos += y_vel * deltaTime;
+      z_pos += z_vel * deltaTime;
+
+
+
+      document.getElementById("x-acc").innerText = x_acc;
+      document.getElementById("y-acc").innerText = y_acc;
+      document.getElementById("z-acc").innerText = z_acc;
+
+      document.getElementById("x-vel").innerText = x_vel;
+      document.getElementById("y-vel").innerText = y_vel;
+      document.getElementById("z-vel").innerText = z_vel;
+
+      document.getElementById("x-pos").innerText = x_pos;
+      document.getElementById("y-pos").innerText = y_pos;
+      document.getElementById("z-pos").innerText = z_pos;
+    }
+  </script>
 </body>
+
 </html>
