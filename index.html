@@ -31,6 +31,12 @@
   <p>z pos: <span id="z-pos"></span></p>
 
   <script>
+
+    // https://yari-demos.prod.mdn.mozit.cloud/en-US/docs/Web/API/Device_orientation_events/Detecting_device_orientation/_sample_.Orientation_example.html
+    // https://trekhleb.dev/blog/2021/gyro-web/
+
+    // THIS MUST BE ON A PAGE WITH HTTPS OR ELSE ACCELEROMETER AND GYROSCOPE PERMISSION CANNOT BE GRANTED (or even be prompted to be granted)
+    
       function onClick() {
       
       if (typeof DeviceOrientationEvent.requestPermission === 'function') {
