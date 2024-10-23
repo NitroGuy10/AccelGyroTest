@@ -99,6 +99,10 @@
 
     let lastTime = 0;
 
+    let prev_x_acc = 0;
+    let prev_y_acc = 0;
+    let prev_z_acc = 0;
+
     let x_vel = 0;
     let y_vel = 0;
     let z_vel = 0;
@@ -117,10 +121,32 @@
       const y_acc = event.acceleration.y;  // Up and down
       const z_acc = event.acceleration.z;  // Into and out of screen
 
-      x_vel += x_acc.toFixed(2) * deltaTime;
-      y_vel += y_acc.toFixed(2) * deltaTime;
-      z_vel += z_acc.toFixed(2) * deltaTime;
+      // trapezoidal integration
+      x_vel += 0.5 * (x_acc + prev_x_acc) * deltaTime;
+      y_vel += 0.5 * (y_acc + prev_y_acc) * deltaTime;
+      z_vel += 0.5 * (z_acc + prev_z_acc) * deltaTime;
 
+      prev_x_acc = x_acc;
+      prev_y_acc = y_acc;
+      prev_z_acc = z_acc;
+
+      // damping
+      x_vel *= 0.5
+      y_vel *= 0.5
+      z_vel *= 0.5
+
+      // update position
+      x_pos += x_vel * deltaTime;
+      y_pos += y_vel * deltaTime;
+      z_pos += z_vel * deltaTime;
+
+      document.getElementById("x-vel").innerText = x_vel;
+      document.getElementById("y-vel").innerText = y_vel;
+      document.getElementById("z-vel").innerText = z_vel;
+
+      document.getElementById("x-pos").innerText = x_pos;
+      document.getElementById("y-pos").innerText = y_pos;
+      document.getElementById("z-pos").innerText = z_pos;
 
       document.getElementById("x-acc").innerText = x_acc;
       document.getElementById("y-acc").innerText = y_acc;
@@ -132,35 +158,6 @@
     const ctx = canvas.getContext("2d");
     
     function draw() {
-      let currentTime = Date.now()
-      let deltaTime = currentTime - lastTime;
-      lastTime = currentTime;
-
-      x_vel *= 0.5
-      y_vel *= 0.5
-      z_vel *= 0.5
-
-      if (x_vel < 0.01 && x_vel > -0.01) {
-        x_vel = 0
-      }
-      if (y_vel < 0.01 && y_vel > -0.01) {
-        y_vel = 0
-      }
-      if (z_vel < 0.01 && z_vel > -0.01) {
-        z_vel = 0
-      }
-
-      x_pos += x_vel.toFixed(2) * deltaTime;
-      y_pos += y_vel.toFixed(2) * deltaTime;
-      z_pos += z_vel.toFixed(2) * deltaTime;
-
-      document.getElementById("x-vel").innerText = x_vel;
-      document.getElementById("y-vel").innerText = y_vel;
-      document.getElementById("z-vel").innerText = z_vel;
-
-      document.getElementById("x-pos").innerText = x_pos;
-      document.getElementById("y-pos").innerText = y_pos;
-      document.getElementById("z-pos").innerText = z_pos;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
