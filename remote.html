@@ -19,8 +19,6 @@
   <div>
     <input type="text" id="distance" value="10">
     <label for="distance">Distance</label>
-    <input type="text" id="scale" value="400">
-    <label for="scale">Scale</label>
     <button onclick="apply()">Apply</button>
   </div>
 
@@ -58,16 +56,17 @@
 
     }
 
-    function positiveModulo(num, mod) {  // Always returns a positive number
-      return ((num % mod) + mod) % mod;
-    }
+    let alpha = 0;
+    let beta = 0;
+    let gamma = 0;
 
     let zero_alpha = 0;
     let zero_beta = 0;
     let zero_gamma = 0;
 
-    let distance = 10;
-    let scale = 400;
+    
+
+    let distance = 4000;
 
     let x_pos = 0;
     let y_pos = 0;
@@ -81,8 +80,8 @@
       document.getElementById("beta").innerText = beta;
       document.getElementById("gamma").innerText = gamma;
 
-      alpha_rad = positiveModulo((alpha - zero_alpha) * Math.PI / 180, 2 * Math.PI);
-      beta_rad = positiveModulo((beta - zero_beta) * Math.PI / 180, 2 * Math.PI);
+      alpha_rad = positiveModulo((alpha - zero_alpha) * Math.PI / 180);
+      beta_rad = positiveModulo((beta - zero_beta) * Math.PI / 180);
 
       x_pos = -distance * Math.tan(alpha_rad);
       y_pos = -distance * Math.tan(beta_rad);
@@ -104,7 +103,6 @@
 
     function apply() {
       distance = parseFloat(document.getElementById("distance").value);
-      scale = parseFloat(document.getElementById("scale").value);
     }
 
     function recalibrate() {
