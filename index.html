@@ -107,15 +107,16 @@
     let y_pos = 250;
     let z_pos = 0;
 
+    const accel_factor = 0.5;
 
     function handleMotion(event) {
       let currentTime = Date.now()
       let deltaTime = currentTime - lastTime;
       lastTime = currentTime;
 
-      let x_acc = event.acceleration.x;  // Left and right
-      let y_acc = event.acceleration.y;  // Up and down
-      let z_acc = event.acceleration.z;  // Into and out of screen
+      let x_acc = event.acceleration.x * accel_factor;  // Left and right
+      let y_acc = event.acceleration.y * accel_factor;  // Up and down
+      let z_acc = event.acceleration.z * accel_factor;  // Into and out of screen
 
       // trapezoidal integration
       x_vel += 0.5 * x_acc * deltaTime;
