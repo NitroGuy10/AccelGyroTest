@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <p>alpha: <span id="alpha"></span></p>
+  <p>beta: <span id="beta"></span></p>
+  <p>gamma: <span id="gamma"></span></p>
+
+  <p>x pos: <span id="x-pos"></span></p>
+  <p>y pos: <span id="y-pos"></span></p>
+
+  <div>
+    <input type="text" id="distance" value="1">
+    <label for="distance">Distance</label>
+    <input type="text" id="scale" value="1">
+    <label for="scale">Scale</label>
+    <button onclick="apply()">Apply</button>
+  </div>
+
+  <button onclick="onClick()">start</button>
+  <button onclick"recalibrate()">recalibrate</button>
+  <canvas id="canvas" width="500" height="500" style="border: 1px solid black;"></canvas>
+
+  <script>
+
+    // https://yari-demos.prod.mdn.mozit.cloud/en-US/docs/Web/API/Device_orientation_events/Detecting_device_orientation/_sample_.Orientation_example.html
+    // https://trekhleb.dev/blog/2021/gyro-web/
+
+    // THIS MUST BE ON A PAGE WITH HTTPS OR ELSE ACCELEROMETER AND GYROSCOPE PERMISSION CANNOT BE GRANTED (or even be prompted to be granted)
+    
+      function onClick() {
+      
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // Handle iOS 13+ devices.
+        DeviceOrientationEvent.requestPermission()
+          .then((state) => {
+            if (state === 'granted') {
+              window.addEventListener("deviceorientation", handleOrientation);
+            } else {
+              document.body.innerText = state
+              //document.body.innerText = 'Request to access the orientation was rejected';
+            }
+          })
+          .catch((reason) => {
+            document.body.innerText = reason
+          });
+      } else {
+        // Handle regular non iOS 13+ devices.
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+
+    }
+
+    let zero_alpha = 0;
+    let zero_beta = 0;
+    let zero_gamma = 0;
+
+    let distance = 1;
+    let scale = 1;
+
+    let x_pos = 0;
+    let y_pos = 0;
+
+    function handleOrientation(event) {
+      const alpha = event.alpha;  // Horizontal Axis
+      const beta = event.beta;  // Vertical Axis
+      const gamma = event.gamma;  // Rotation
+
+      document.getElementById("alpha").innerText = alpha;
+      document.getElementById("beta").innerText = beta;
+      document.getElementById("gamma").innerText = gamma;
+
+      x_pos = distance * Math.tan(alpha - zero_alpha);
+      y_pos = distance * Math.tan(beta - zero_beta);
+    }
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    
+    function draw() {
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(250 + x_pos, 250 + y_pos, 10, 0, 2 * Math.PI);
+      ctx.fill();
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    function apply() {
+      distance = parseFloat(document.getElementById("distance").value);
+      scale = parseFloat(document.getElementById("scale").value);
+    }
+
+    function recalibrate() {
+      zero_alpha = alpha;
+      zero_beta = beta;
+      zero_gamma = gamma;
+    }
+
+  </script>
+</body>
+
+</html>
