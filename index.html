@@ -32,6 +32,11 @@
   <button onclick="onClick()">start</button>
   <canvas id="canvas" width="500" height="500" style="border: 1px solid black;"></canvas>
 
+  <input type="text" id="vel-damping" value="1">
+  <input type="text" id="low-pass" value="1">
+  <button onclick="apply()">Apply</button>
+
+  <br>
   <button onclick="x_vel -= 1">accel left</button>
   <button onclick="x_vel += 1">accel right</button>
   <button onclick="y_vel += 1">accel down</button>
@@ -87,6 +92,10 @@
 
     }
 
+    function lerp(a, b, alpha) {
+      return a + alpha * (b - a);
+    }
+
     function handleOrientation(event) {
       const alpha = event.alpha;  // Roll
       const beta = event.beta;  // Pitch
@@ -99,6 +108,10 @@
 
     let lastTime = 0;
 
+    let prev_x_acc = 0;
+    let prev_y_acc = 0;
+    let prev_z_acc = 0;
+
     let x_vel = 0;
     let y_vel = 0;
     let z_vel = 0;
@@ -108,6 +121,8 @@
     let z_pos = 0;
 
     const accel_factor = 0.1;
+    let vel_damping = 1;
+    let low_pass_alpha = 1;
 
     function handleMotion(event) {
       let currentTime = Date.now()
@@ -118,15 +133,20 @@
       let y_acc = event.acceleration.y * accel_factor;  // Up and down
       let z_acc = event.acceleration.z * accel_factor;  // Into and out of screen
 
+      // low pass filter
+      let blend = 1 - 0.5**(low_pass_alpha * deltaTime);
+      x_acc = lerp(prev_x_acc, x_acc, low_pass_alpha);
+      y_acc = lerp(prev_y_acc, y_acc, low_pass_alpha);
+      z_acc = lerp(prev_z_acc, z_acc, low_pass_alpha);
+
+      prev_x_acc = x_acc;
+      prev_y_acc = y_acc;
+      prev_z_acc = z_acc;
+
       // trapezoidal integration
       x_vel += 0.5 * x_acc * deltaTime;
       y_vel += 0.5 * y_acc * deltaTime;
       z_vel += 0.5 * z_acc * deltaTime;
-
-      // damping
-      //x_vel *= 0.5
-      //y_vel *= 0.5
-      //z_vel *= 0.5
 
       // update position
       x_pos += x_vel * deltaTime;
@@ -136,6 +156,12 @@
       x_vel += 0.5 * x_acc * deltaTime;
       y_vel += 0.5 * y_acc * deltaTime;
       z_vel += 0.5 * z_acc * deltaTime;
+
+      // apply damping to velocity
+      blend = 1 - 0.5**(vel_damping * deltaTime);
+      x_vel = lerp(x_vel, 0, blend);
+      y_vel = lerp(y_vel, 0, blend);
+      z_vel = lerp(z_vel, 0, blend);
 
       document.getElementById("x-vel").innerText = x_vel;
       document.getElementById("y-vel").innerText = y_vel;
@@ -164,6 +190,11 @@
       requestAnimationFrame(draw);
     }
     draw();
+
+    function apply() {
+      vel_damping = parseFloat(document.getElementById("vel-damping").value);
+      low_pass_alpha = parseFloat(document.getElementById("low-pass").value);
+    }
 
   </script>
 </body>
