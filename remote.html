@@ -77,8 +77,11 @@
       document.getElementById("beta").innerText = beta;
       document.getElementById("gamma").innerText = gamma;
 
-      x_pos = distance * Math.tan(alpha - zero_alpha);
-      y_pos = distance * Math.tan(beta - zero_beta);
+      alpha_rad = alpha * Math.PI / 180;
+      beta_rad = beta * Math.PI / 180;
+
+      x_pos = distance * Math.tan(alpha_rad - zero_alpha);
+      y_pos = distance * Math.tan(beta_rad - zero_beta);
     }
 
     const canvas = document.getElementById("canvas");
