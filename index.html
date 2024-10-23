@@ -9,7 +9,6 @@
 </head>
 
 <body>
-  <button onclick="onClick()">start</button>
   <p>alpha: <span id="alpha"></span></p>
   <p>beta: <span id="beta"></span></p>
   <p>gamma: <span id="gamma"></span></p>
@@ -30,6 +29,7 @@
   <p>y pos: <span id="y-pos"></span></p>
   <p>z pos: <span id="z-pos"></span></p>
 
+  <button onclick="onClick()">start</button>
   <canvas id="canvas" width="500" height="500" style="border: 1px solid black;"></canvas>
 
   <button onclick="x_vel -= 1">accel left</button>
@@ -107,7 +107,7 @@
     let y_pos = 250;
     let z_pos = 0;
 
-    const accel_factor = 0.5;
+    const accel_factor = 0.1;
 
     function handleMotion(event) {
       let currentTime = Date.now()
