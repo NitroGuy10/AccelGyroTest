@@ -17,7 +17,7 @@
   <p>y pos: <span id="y-pos"></span></p>
 
   <div>
-    <input type="text" id="distance" value="10">
+    <input type="text" id="distance" value="4000">
     <label for="distance">Distance</label>
     <button onclick="apply()">Apply</button>
   </div>
@@ -72,9 +72,9 @@
     let y_pos = 0;
 
     function handleOrientation(event) {
-      const alpha = event.alpha;  // Horizontal Axis
-      const beta = event.beta;  // Vertical Axis
-      const gamma = event.gamma;  // Rotation
+      alpha = event.alpha;  // Horizontal Axis
+      beta = event.beta;  // Vertical Axis
+      gamma = event.gamma;  // Rotation
 
       document.getElementById("alpha").innerText = alpha;
       document.getElementById("beta").innerText = beta;
