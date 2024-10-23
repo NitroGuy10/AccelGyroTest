@@ -158,10 +158,20 @@
       //z_vel += 0.5 * z_acc * deltaTime;
 
       // apply damping to velocity
-      blend = 1 - 0.5**(vel_damping * deltaTime);
-      x_vel = lerp(x_vel, 0, blend);
-      y_vel = lerp(y_vel, 0, blend);
-      z_vel = lerp(z_vel, 0, blend);
+      //blend = 1 - 0.5**(vel_damping * deltaTime);
+      //x_vel = lerp(x_vel, 0, blend);
+      //y_vel = lerp(y_vel, 0, blend);
+      //z_vel = lerp(z_vel, 0, blend);
+
+      if (Math.abs(x_vel) < 0.01) {
+        x_vel = 0;
+      }
+      if (Math.abs(y_vel) < 0.01) {
+        y_vel = 0;
+      }
+      if (Math.abs(z_vel) < 0.01) {
+        z_vel = 0;
+      }
 
       document.getElementById("x-vel").innerText = x_vel;
       document.getElementById("y-vel").innerText = y_vel;
