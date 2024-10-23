@@ -80,8 +80,8 @@
       document.getElementById("beta").innerText = beta;
       document.getElementById("gamma").innerText = gamma;
 
-      alpha_rad = positiveModulo((alpha - zero_alpha) * Math.PI / 180);
-      beta_rad = positiveModulo((beta - zero_beta) * Math.PI / 180);
+      alpha_rad = (alpha - zero_alpha) * Math.PI / 180;
+      beta_rad = (beta - zero_beta) * Math.PI / 180;
 
       x_pos = -distance * Math.tan(alpha_rad);
       y_pos = -distance * Math.tan(beta_rad);
