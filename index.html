@@ -109,6 +109,9 @@
 
 
     function handleMotion(event) {
+      let currentTime = Date.now()
+      let deltaTime = currentTime - lastTime;
+      lastTime = currentTime;
 
       const x_acc = event.acceleration.x;  // Left and right
       const y_acc = event.acceleration.y;  // Up and down
