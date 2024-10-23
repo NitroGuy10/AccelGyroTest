@@ -144,18 +144,18 @@
       prev_z_acc = z_acc;
 
       // trapezoidal integration
-      x_vel += 0.5 * x_acc * deltaTime;
-      y_vel += 0.5 * y_acc * deltaTime;
-      z_vel += 0.5 * z_acc * deltaTime;
+      x_vel += 0.5 * (x_acc + prev_x_acc) * deltaTime;
+      y_vel += 0.5 * (y_acc + prev_y_acc) * deltaTime;
+      z_vel += 0.5 * (z_acc + prev_z_acc) * deltaTime;
 
       // update position
       x_pos += x_vel * deltaTime;
       y_pos += y_vel * deltaTime;
       z_pos += z_vel * deltaTime;
 
-      x_vel += 0.5 * x_acc * deltaTime;
-      y_vel += 0.5 * y_acc * deltaTime;
-      z_vel += 0.5 * z_acc * deltaTime;
+      //x_vel += 0.5 * x_acc * deltaTime;
+      //y_vel += 0.5 * y_acc * deltaTime;
+      //z_vel += 0.5 * z_acc * deltaTime;
 
       // apply damping to velocity
       blend = 1 - 0.5**(vel_damping * deltaTime);
