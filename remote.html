@@ -58,6 +58,10 @@
 
     }
 
+    function positiveModulo(num, mod) {  // Always returns a positive number
+      return ((num % mod) + mod) % mod;
+    }
+
     let zero_alpha = 0;
     let zero_beta = 0;
     let zero_gamma = 0;
@@ -77,11 +81,11 @@
       document.getElementById("beta").innerText = beta;
       document.getElementById("gamma").innerText = gamma;
 
-      alpha_rad = alpha * Math.PI / 180;
-      beta_rad = beta * Math.PI / 180;
+      alpha_rad = positiveModulo((alpha - zero_alpha) * Math.PI / 180, 2 * Math.PI);
+      beta_rad = positiveModulo((beta - zero_beta) * Math.PI / 180, 2 * Math.PI);
 
-      x_pos = distance * Math.tan(alpha_rad - zero_alpha);
-      y_pos = distance * Math.tan(beta_rad - zero_beta);
+      x_pos = -distance * Math.tan(alpha_rad);
+      y_pos = -distance * Math.tan(beta_rad);
     }
 
     const canvas = document.getElementById("canvas");
