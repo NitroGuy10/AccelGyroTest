@@ -99,10 +99,6 @@
 
     let lastTime = 0;
 
-    let prev_x_acc = 0;
-    let prev_y_acc = 0;
-    let prev_z_acc = 0;
-
     let x_vel = 0;
     let y_vel = 0;
     let z_vel = 0;
@@ -117,28 +113,28 @@
       let deltaTime = currentTime - lastTime;
       lastTime = currentTime;
 
-      const x_acc = event.acceleration.x;  // Left and right
-      const y_acc = event.acceleration.y;  // Up and down
-      const z_acc = event.acceleration.z;  // Into and out of screen
+      let x_acc = event.acceleration.x;  // Left and right
+      let y_acc = event.acceleration.y;  // Up and down
+      let z_acc = event.acceleration.z;  // Into and out of screen
 
       // trapezoidal integration
-      x_vel += 0.5 * (x_acc + prev_x_acc) * deltaTime;
-      y_vel += 0.5 * (y_acc + prev_y_acc) * deltaTime;
-      z_vel += 0.5 * (z_acc + prev_z_acc) * deltaTime;
-
-      prev_x_acc = x_acc;
-      prev_y_acc = y_acc;
-      prev_z_acc = z_acc;
+      x_vel += 0.5 * x_acc * deltaTime;
+      y_vel += 0.5 * y_acc * deltaTime;
+      z_vel += 0.5 * z_acc * deltaTime;
 
       // damping
-      x_vel *= 0.5
-      y_vel *= 0.5
-      z_vel *= 0.5
+      //x_vel *= 0.5
+      //y_vel *= 0.5
+      //z_vel *= 0.5
 
       // update position
       x_pos += x_vel * deltaTime;
       y_pos += y_vel * deltaTime;
       z_pos += z_vel * deltaTime;
+
+      x_vel += 0.5 * x_acc * deltaTime;
+      y_vel += 0.5 * y_acc * deltaTime;
+      z_vel += 0.5 * z_acc * deltaTime;
 
       document.getElementById("x-vel").innerText = x_vel;
       document.getElementById("y-vel").innerText = y_vel;
