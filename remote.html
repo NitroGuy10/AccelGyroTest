@@ -17,15 +17,15 @@
   <p>y pos: <span id="y-pos"></span></p>
 
   <div>
-    <input type="text" id="distance" value="1">
+    <input type="text" id="distance" value="10">
     <label for="distance">Distance</label>
-    <input type="text" id="scale" value="1">
+    <input type="text" id="scale" value="400">
     <label for="scale">Scale</label>
     <button onclick="apply()">Apply</button>
   </div>
 
   <button onclick="onClick()">start</button>
-  <button onclick"recalibrate()">recalibrate</button>
+  <button onclick="recalibrate()">recalibrate</button>
   <canvas id="canvas" width="500" height="500" style="border: 1px solid black;"></canvas>
 
   <script>
@@ -62,8 +62,8 @@
     let zero_beta = 0;
     let zero_gamma = 0;
 
-    let distance = 1;
-    let scale = 1;
+    let distance = 10;
+    let scale = 400;
 
     let x_pos = 0;
     let y_pos = 0;
