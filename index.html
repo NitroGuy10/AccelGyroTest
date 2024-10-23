@@ -30,6 +30,13 @@
   <p>y pos: <span id="y-pos"></span></p>
   <p>z pos: <span id="z-pos"></span></p>
 
+  <canvas id="canvas" width="500" height="500" style="border: 1px solid black;"></canvas>
+
+  <button onclick="x_vel -= 1">accel left</button>
+  <button onclick="x_vel += 1">accel right</button>
+  <button onclick="y_vel += 1">accel down</button>
+  <button onclick="y_vel -= 1">accel up</button>
+
   <script>
 
     // https://yari-demos.prod.mdn.mozit.cloud/en-US/docs/Web/API/Device_orientation_events/Detecting_device_orientation/_sample_.Orientation_example.html
@@ -96,37 +103,53 @@
     let y_vel = 0;
     let z_vel = 0;
 
-    let x_pos = 0;
-    let y_pos = 0;
+    let x_pos = 250;
+    let y_pos = 250;
     let z_pos = 0;
 
 
     function handleMotion(event) {
-
-      let currentTime = Date.now()
-      let deltaTime = currentTime - lastTime;
-      lastTime = currentTime;
 
       const x_acc = event.acceleration.x;  // Left and right
       const y_acc = event.acceleration.y;  // Up and down
       const z_acc = event.acceleration.z;  // Into and out of screen
 
       x_vel += x_acc.toFixed(2) * deltaTime;
-      x_vel *= 0.9
       y_vel += y_acc.toFixed(2) * deltaTime;
-      y_vel *= 0.9
       z_vel += z_acc.toFixed(2) * deltaTime;
-      z_vel *= 0.9
-
-      x_pos += x_vel.toFixed(2) * deltaTime;
-      y_pos += y_vel.toFixed(2) * deltaTime;
-      z_pos += z_vel.toFixed(2) * deltaTime;
-
 
 
       document.getElementById("x-acc").innerText = x_acc;
       document.getElementById("y-acc").innerText = y_acc;
       document.getElementById("z-acc").innerText = z_acc;
+     
+    }
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    
+    function draw() {
+      let currentTime = Date.now()
+      let deltaTime = currentTime - lastTime;
+      lastTime = currentTime;
+
+      x_vel *= 0.5
+      y_vel *= 0.5
+      z_vel *= 0.5
+
+      if (x_vel < 0.01 && x_vel > -0.01) {
+        x_vel = 0
+      }
+      if (y_vel < 0.01 && y_vel > -0.01) {
+        y_vel = 0
+      }
+      if (z_vel < 0.01 && z_vel > -0.01) {
+        z_vel = 0
+      }
+
+      x_pos += x_vel.toFixed(2) * deltaTime;
+      y_pos += y_vel.toFixed(2) * deltaTime;
+      z_pos += z_vel.toFixed(2) * deltaTime;
 
       document.getElementById("x-vel").innerText = x_vel;
       document.getElementById("y-vel").innerText = y_vel;
@@ -135,7 +158,16 @@
       document.getElementById("x-pos").innerText = x_pos;
       document.getElementById("y-pos").innerText = y_pos;
       document.getElementById("z-pos").innerText = z_pos;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(x_pos, y_pos, 10, 0, 2 * Math.PI);
+      ctx.fill();
+
+      requestAnimationFrame(draw);
     }
+    draw();
+
   </script>
 </body>
 
